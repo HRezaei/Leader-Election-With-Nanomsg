@@ -155,14 +155,14 @@ int listen_incommings(int mode) {
 
 
 /**
-ring 2 ipc:///tmp/node1to2.ipc ipc:///tmp/node2to3.ipc start
+ring 9 ipc:///tmp/node1.ipc ipc:///tmp/node2.ipc yes wait
 **/
 int main (const int argc, char **argv)
 {
 	int mode = 0;
 	printf ("elected=%s\n", elected);
   if (argc < 4) {
-	printf ("Usage: ring identifier previous_url neighbour_url\n");
+	printf ("Usage: ring <identifier> <this_node_url> <next_url> <yes|no> [wait]\n");
 
 	return 1;
   }
@@ -174,10 +174,10 @@ int main (const int argc, char **argv)
 	connect_previous(argv[2]);
 	connect_neighbour(argv[3]);
 	printf ("my identifier=%s\n", identifier);
-	if(strcmp(identifier, "3")==0) {	
+	if(argc==5 && strncmp(argv[4], "yes",3)==0) {
 		start_election();
 	}
-	if(argc==5 && strncmp(argv[4], "wait",4)==0) {
+	if((argc == 6) && strncmp(argv[5], "wait", 4)==0) {	
 		mode = 1;
 	}
 	listen_incommings(mode);
